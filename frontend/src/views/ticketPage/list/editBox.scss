@@ -1,0 +1,24 @@
+#ticketList .editBox {
+    .box {
+        width: 24rem;
+        .column {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            input {
+                outline: none;
+                border: none;
+                font-size: inherit;
+                max-width: 8em;
+                color: var(--color-sub);
+                border-bottom: 0.1rem solid var(--color-sub);
+                transition: color 0.3s, border-color 0.3s;
+            }
+            input:focus {
+                color: var(--color-rev);
+                border-bottom-color: var(--color-rev);
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+#configTab {
+    .column {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .key {
+            padding: 1rem 0;
+        }
+
+        input {
+            font-size: inherit;
+            background-color: transparent;
+            color: var(--color-sub);
+            outline: none;
+            border: none;
+            border-bottom: 0.05rem solid var(--color-sub);
+            font-size: 1.25rem;
+            height: 1.5rem;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        input:focus {
+            color: var(--color);
+            border-color: var(--color);
+        }
+    }
+}

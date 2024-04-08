@@ -1,0 +1,172 @@
+#ticketList {
+    position: relative;
+    isolation: isolate;
+    h2 {
+        display: flex;
+        gap: 1rem;
+        .authorInfo {
+            display: flex;
+            margin-top: 0.25em;
+            height: calc(100% - 0.25em);
+            align-items: center;
+            gap: 0.5rem;
+            img {
+                height: 2rem;
+                border-radius: 50%;
+            }
+            .userName {
+                font-size: 1.5rem;
+                font-weight: 400;
+            }
+        }
+    }
+
+    .box {
+        height: calc(100% - 5.75rem);
+        margin: 1rem 0;
+        overflow: auto;
+        
+        .empty {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-sub);
+            font-size: 1.5rem;
+        }
+
+        .dataBox {
+            position: relative;
+            height: 2rem;
+            padding: 0.3rem 0.8rem;
+            overflow: hidden;
+            border: 0.1rem solid var(--bg-sec);
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.5s, height 0.5s;
+
+
+            .snapshot {
+                height: 2rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                > a {
+                    user-select: none;
+                    cursor: pointer;
+                    transition: color 0.3s;
+                    color: var(--color);
+                    text-decoration: none;
+                }
+
+                .remark {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    margin-right: auto;
+                }
+
+                label {
+                    user-select: none;
+                    cursor: pointer;
+                    transition: transform 0.3s;
+                    transform: rotate(90deg);
+
+                    span {
+                        line-height: 2rem;
+                        font-size: 1.2rem;
+                    }
+
+                    input {
+                        display: none;
+                    }
+                }
+            }
+
+            .snapshot:has(a:hover) {
+                a {
+                    color: var(--color-focus);
+                }
+            }
+
+            .detail {
+                position: absolute;
+                top: 2.6rem;
+                width: calc(100% - 1.6rem);
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                user-select: none;
+
+                .column {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    flex: 1;
+                    width: calc(50% - 0.25rem);
+                    height: 3.2rem;
+                    @media screen and (max-width: 32em) {
+                        min-width: 11.5rem;
+                    }
+
+                    .key {
+                        color: var(--color-sub);
+                        font-weight: 200;
+                    }
+                }
+
+                .buttonBar {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 0.8rem;
+                    height: 1.6rem;
+
+                    button {
+                        width: 5rem;
+                        border-radius: 0.5rem;
+                        user-select: none;
+                        cursor: pointer;
+                        box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem #000;
+                        transition: transform 0.3s, box-shadow 0.3s;
+                    }
+
+                    button:disabled {
+                        pointer-events: none;
+                        background-color: var(--button-disable);
+                    }
+
+                    button:not(:disabled):active {
+                        box-shadow: 0rem 0rem 0.2rem -0.1rem #000;
+                        transform: translateY(0.1rem);
+                    }
+
+                    .edit {
+                        background-color: var(--button-edit);
+                    }
+
+                    .delete {
+                        background-color: var(--button-remove);
+                    }
+                }
+            }
+        }
+
+        .dataBox:has(input:checked) {
+            height: 7.6rem;
+            background-color: var(--bg-sec);
+            @media screen and (max-width: 32em) {
+                height: 11.3rem;
+            }
+
+            label {
+                transform: rotate(0);
+            }
+        }
+    }
+
+}

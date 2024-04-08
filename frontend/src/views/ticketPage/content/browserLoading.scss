@@ -1,0 +1,70 @@
+#ticketContent .files .browser .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+
+    .container {
+        position: relative;
+        width: 16rem;
+        max-width: 80%;
+        display: flex;
+        font-size: 1.75rem;
+        color: var(--color-sub);
+        align-items: center;
+        justify-content: space-between;
+
+        .ico {
+            position: absolute;
+            width: 1em;
+            height: 0.8em;
+            line-height: 0.8em;
+            font-size: 0.8em;
+            opacity: 0%;
+            animation: transmitX 4s ease-in-out infinite;
+            animation-delay: calc(1s * var(--delay));
+        }
+
+        .ico::before {
+            content: "draft";
+            position: absolute;
+            font-family: inherit;
+            animation: transmitY 4s ease-in-out infinite;
+            animation-delay: calc(1s * var(--delay));
+        }
+    }
+
+    @keyframes transmitX {
+        0% {
+            left: 0.1em;
+            opacity: 0%;
+        }
+
+        25% {
+            opacity: 100%;
+        }
+
+        75% {
+            opacity: 100%;
+        }
+
+        100% {
+            left: calc(100% - 1.1em);
+            opacity: 0%;
+        }
+    }
+
+    @keyframes transmitY {
+        0% {
+            top: 0em;
+        }
+
+        50% {
+            top: -1.5em;
+        }
+
+        100% {
+            top: 0em;
+        }
+    }
+}

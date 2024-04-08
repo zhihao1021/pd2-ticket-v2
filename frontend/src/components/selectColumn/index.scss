@@ -1,0 +1,41 @@
+.selectColumn {
+    display: flex;
+    height: 1.35em;
+    align-items: center;
+    gap: 0.25em;
+
+    button {
+        padding: 0;
+        transition: color 0.3s, opcaity 0.3s;
+    }
+    button:disabled {
+        padding: 0;
+        color: var(--button-disable);
+        opacity: 30%;
+    }
+
+    .content {
+        position: relative;
+        height: 100%;
+        width: calc(0.7em * var(--width));
+        overflow: hidden;
+
+        .option {
+            position: absolute;
+            text-align: center;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transition: left 0.5s;
+        }
+
+        .option[data-select=LAST] {
+            left: -100%;
+        }
+
+        .option[data-select=NEXT] {
+            left: 100%;
+        }
+    }
+}

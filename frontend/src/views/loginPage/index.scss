@@ -1,0 +1,35 @@
+#loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+        width: 18rem;
+        max-width: 90%;
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        color: var(--color-rev);
+        background-color: var(--bg-rev);
+        border-radius: 1.5rem;
+
+        h1 {
+            text-align: center;
+        }
+
+        a {
+            padding: 1rem;
+            border-radius: 0.8rem;
+            background-color: #5865F2;
+            box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem #000;
+            transition: box-shadow 0.1s, transform 0.1s;
+        }
+        a:active {
+            transform: translateY(0.1rem);
+            box-shadow: 0rem 0rem 0.2rem -0.1rem #000;
+        }
+    }
+}

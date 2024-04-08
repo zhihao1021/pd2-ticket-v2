@@ -1,0 +1,130 @@
+#uploadTab {
+    .toolBar {
+        position: relative;
+        height: 2rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+
+
+        .searchIcon {
+            position: absolute;
+            height: 2rem;
+            width: 1.5rem;
+            text-align: center;
+            line-height: 2rem;
+            color: var(--color-sub);
+            transition: color 0.5s;
+        }
+
+        .searchIcon:has(+.search:focus) {
+            color: var(--color);
+        }
+
+        .search {
+            width: calc(100% - 9rem);
+            background-color: transparent;
+            color: var(--color-sub);
+            font-size: 1.2rem;
+            line-height: 1.2rem;
+            padding-inline-start: 1.5rem;
+            border: none;
+            border-bottom: 0.05rem solid var(--color-sub);
+            outline: none;
+            transition: color 0.5s, border-color 0.5s;
+        }
+
+        .search:focus {
+            color: var(--color);
+            border-color: var(--color);
+        }
+
+        // button.clear {
+        //     height: 1.8rem;
+        //     width: 2.5rem;
+        //     color: var(--color-sub);
+        //     border: 0.1rem solid var(--color-sub);
+        //     border-radius: 0.25rem;
+        //     transition: border-color 0.3s, color 0.3s;
+        // }
+
+        label {
+            position: relative;
+            height: 1.8rem;
+            width: 2.5rem;
+            color: var(--color-sub);
+            border: 0.1rem solid var(--color-sub);
+            border-radius: 0.25rem;
+            transition: border-color 0.3s, color 0.3s;
+            cursor: pointer;
+
+            input,
+            button {
+                display: none;
+            }
+        }
+
+        label:hover {
+            color: var(--color);
+            border-color: var(--color);
+        }
+
+        label::before {
+            position: absolute;
+            font-family: "Material Symbols Outlined";
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            line-height: 1.8rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        label.selectFile::before {
+            content: "note_add";
+        }
+        
+        label.selectDirectory::before {
+            content: "create_new_folder";
+        }
+
+        label.clear::before {
+            content: "close";
+        }
+    }
+
+    .list {
+        height: calc(100% - 5rem);
+        margin-bottom: 0.5rem;
+        overflow-y: auto;
+
+        >div {
+            display: flex;
+            overflow: hidden;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0.25rem 0;
+            color: var(--color-sub);
+            transition: color 0.5s;
+
+            span {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                user-select: none;
+            }
+        }
+
+        >div:has(*:hover) {
+            color: var(--color);
+        }
+
+        >div:has(button:hover) {
+            span {
+                text-decoration: line-through;
+            }
+        }
+    }
+}

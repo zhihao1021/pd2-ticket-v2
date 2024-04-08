@@ -1,0 +1,101 @@
+#uploadPage {
+    height: calc(100% - 1.5rem) !important;
+    padding: 0.75rem 0;
+
+    h2 {
+        width: 100vh;
+        height: 3.75rem;
+        line-height: 3.75rem;
+        max-width: 95vw;
+        margin: auto;
+    }
+
+    .titleBox {
+        position: relative;
+        width: 100vh;
+        height: 3rem;
+        max-width: 95vw;
+        margin: auto;
+        overflow: hidden;
+
+        h3 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 3rem;
+            line-height: 3rem;
+            transition: top 0.3s;
+        }
+
+        h3[data-state=LAST] {
+            top: -100%;
+        }
+
+        h3[data-state=NEXT] {
+            top: 100%;
+        }
+    }
+
+    .box {
+        position: relative;
+        width: 100vh;
+        height: calc(100% - 6.75rem);
+        max-width: 95vw;
+        margin: auto;
+        overflow: hidden;
+
+        .section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: left 0.5s;
+
+            .buttonBar {
+                height: 2rem;
+                display: flex;
+                gap: 0.5rem;
+                justify-content: right;
+
+                button {
+                    height: 2rem;
+                    padding: 0.25rem 1.5rem;
+                    border-radius: 0.3rem;
+                    box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem #000;
+                    transition: transform 0.5s, filter 0.3s;
+                    user-select: none;
+                }
+
+                button:hover {
+                    filter: brightness(0.9);
+                }
+
+                button:active {
+                    transform: translateY(0.1rem);
+                    box-shadow: 0rem 0rem 0.2rem -0.1rem #000;
+                }
+
+                button.next {
+                    background-color: var(--button-next);
+                }
+
+                button.last {
+                    background-color: var(--button-last);
+                }
+
+                button:disabled {
+                    background-color: var(--button-disable);
+                }
+            }
+        }
+
+        .section[data-state=LAST] {
+            left: -100%;
+        }
+
+        .section[data-state=NEXT] {
+            left: 100%;
+        }
+    }
+}

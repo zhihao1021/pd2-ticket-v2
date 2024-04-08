@@ -1,0 +1,73 @@
+#messageQueue {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: calc(100vh - 2rem);
+    width: 22rem;
+    max-width: calc(100vw - 2rem);
+    padding: 1rem;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+
+    .box {
+        position: relative;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        animation: trans 6s forwards;
+        margin-bottom: 0.5rem;
+        white-space: pre-line;
+    }
+
+    .box::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 0.15rem;
+        background-color: inherit;
+        filter: brightness(0.5);
+        animation: countdown 5s 1s forwards;
+    }
+
+    .box[data-level=INFO] {
+        background-color: var(--box-info);
+    }
+
+    .box[data-level=WARNING] {
+        background-color: var(--box-warning);
+    }
+
+    .box[data-level=ERROR] {
+        background-color: var(--box-error);
+    }
+
+    @keyframes trans {
+        0% {
+            transform: translateY(5rem);
+            opacity: 0%;
+        }
+        14% {
+            transform: translateY(0);
+            opacity: 100%;
+        }
+        86% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(100vw);
+        }
+    }
+
+    @keyframes countdown {
+        0% {
+            width: 100%;
+        }
+
+        100% {
+            width: 0%;
+        }
+    }
+}

@@ -1,0 +1,317 @@
+#ticketContent {
+    button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 1.25rem;
+    }
+
+    .tabList {
+        display: flex;
+        height: 2rem;
+
+
+        .tab {
+            color: var(--button-disable);
+            border: 0.1rem solid var(--color);
+            border-left: 0.05rem solid var(--button-disable);
+            border-right: 0.05rem solid var(--button-disable);
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .tab:nth-child(1) {
+            border-left: 0.1rem solid var(--color);
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .tab:nth-child(2) {
+            border-right: 0.1rem solid var(--color);
+            border-top-right-radius: 0.3rem;
+            border-bottom-right-radius: 0.3rem;
+        }
+
+        .tab:hover,
+        .tab[data-select=true] {
+            color: var(--color);
+            border-color: var(--color);
+        }
+
+        .share {
+            margin-left: auto;
+            border-radius: 0.3rem;
+            background-color: var(--button-share);
+            box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem #000;
+            transition: transform 0.5s, filter 0.3s;
+        }
+
+        .share:hover {
+            filter: brightness(0.9);
+        }
+
+        .share:active {
+            transform: translateY(0.1rem);
+            box-shadow: 0rem 0rem 0.2rem -0.1rem #000;
+        }
+    }
+
+    .content {
+        margin-top: 1rem;
+        height: calc(100% - 8.25rem);
+        overflow: hidden;
+        position: relative;
+        isolation: isolate;
+        border: 0.1rem solid var(--color);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+
+        >div {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            height: calc(100% - 1.5rem);
+            width: calc(100% - 1.5rem);
+        }
+
+        .mask {
+            z-index: 10;
+            height: 0;
+            width: 0;
+            border-bottom-right-radius: 100%;
+            pointer-events: none;
+            background-color: var(--bg);
+            overflow: hidden;
+            transition: width 0.8s, height 0.8s;
+        }
+
+        .info {
+            .buttonBar {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                height: 2rem;
+
+                button {
+                    padding-left: 1em;
+                    padding-right: 1em;
+                    height: 1.9rem;
+                    border-radius: 0.3rem;
+                    box-shadow: 0.1rem 0.1rem 0.2rem -0.1rem #000;
+                    transition: transform 0.5s, filter 0.3s;
+                }
+
+                button:hover {
+                    filter: brightness(0.9);
+                }
+
+                button:active {
+                    transform: translateY(0.1rem);
+                    box-shadow: 0rem 0rem 0.2rem -0.1rem #000;
+                }
+
+                button.download {
+                    background-color: var(--button-download);
+                }
+            }
+
+            .column:not(.remark) {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem 0;
+
+                .row {
+                    width: 50%;
+                    height: 3.75rem;
+
+                    @media screen and (max-width: 32rem) {
+                        width: 100%;
+                    }
+
+                    .key {
+                        font-weight: 200;
+                        height: 1.25rem;
+                    }
+
+                    .value {
+                        margin-top: 0.5rem;
+                        height: 2rem;
+                        line-height: 2rem;
+                    }
+
+                    .value:has(img) {
+                        display: flex;
+                        gap: 0.75rem;
+
+                        img {
+                            object-fit: contain;
+                            height: 100%;
+                            border-radius: 50%;
+                        }
+
+                        .name {
+                            color: var(--color);
+                            text-decoration: none;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            transition: color 0.3s;
+                        }
+
+                        .name:hover {
+                            color: var(--color-focus);
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+
+            .column {
+                margin-top: 1rem;
+            }
+
+            .column.remark {
+                height: calc(100% - 12.5rem);
+                overflow: hidden;
+
+                @media screen and (max-width: 32em) {
+                    height: calc(100% - 22rem);
+                }
+
+                .key {
+                    font-weight: 200;
+                    height: 1.25rem;
+                }
+
+                .value {
+                    margin-top: 0.5rem;
+                    height: calc(100% - 1.5rem);
+                    overflow: hidden;
+                    word-break: break-all;
+                    overflow-y: auto;
+                }
+            }
+        }
+
+        .files {
+            height: calc(100vh - 9.75rem);
+            width: calc(100vh - 1.7rem);
+            max-width: calc(95vw - 1.7rem);
+            overflow: hidden;
+
+            .titleBar {
+                height: 3rem;
+                position: relative;
+                overflow: hidden;
+
+                .box {
+                    position: absolute;
+                    left: 0;
+                    height: 3rem;
+                    line-height: 3rem;
+                    transition: top 0.5s;
+                }
+            }
+
+            .browser {
+                margin-top: 0.5rem;
+                height: calc(100% - 3.5rem);
+                position: relative;
+                overflow: hidden;
+
+                .box {
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    width: 100%;
+                    transition: left 0.5s;
+                }
+
+                .box.list {
+                    overflow: auto;
+
+                    .container {
+                        a {
+                            color: var(--color);
+                            user-select: none;
+                            text-decoration: none;
+                            white-space: nowrap;
+                            transition: color 0.3s;
+                        }
+
+                        a:hover {
+                            color: var(--color-focus);
+                            text-decoration: underline;
+                        }
+                    }
+                }
+
+                .box.container>div {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    transition: opacity 0.5s, top 0.5s;
+                }
+
+                .box.container>div[data-show=false] {
+                    pointer-events: none;
+                    top: -10vh;
+                    opacity: 0%;
+                }
+            }
+        }
+
+        .files[data-file=true] {
+            .titleBar {
+                .box:first-child {
+                    top: -100%;
+                }
+
+                .box:last-child {
+                    top: 0;
+                }
+            }
+
+            .browser {
+                .box:first-child {
+                    left: 100%;
+                }
+
+                .box:last-child {
+                    left: 0;
+                }
+            }
+        }
+
+        .files[data-file=false] {
+            .titleBar {
+                .box:first-child {
+                    top: 0;
+                }
+
+                .box:last-child {
+                    top: 100%;
+                }
+            }
+
+            .browser {
+                .box:first-child {
+                    left: 0;
+                }
+
+                .box:last-child {
+                    left: -100%;
+                }
+            }
+        }
+    }
+
+    .content[data-tab="1"] {
+        .mask {
+            height: 150vmax;
+            width: 150vmax;
+            pointer-events: initial;
+        }
+    }
+}

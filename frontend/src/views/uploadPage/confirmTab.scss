@@ -1,0 +1,24 @@
+#confirmTab {
+    .fileCount {
+        display: flex;
+        gap: 0.5rem;
+        font-weight: 200;
+    }
+
+    .column {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .key {
+            padding: 1.5rem 0;
+        }
+        .value {
+            max-width: 60%;
+            line-height: 1.5em;
+            max-height: 4.5em;
+            overflow-y: auto;
+            text-overflow: ellipsis;
+            word-break: break-all;
+        }
+    }
+}

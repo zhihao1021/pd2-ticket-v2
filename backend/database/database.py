@@ -3,7 +3,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from config import MONGODB_URL, MONGODB_NAME
 from discord_oauth import StorageData
-from schemas import TicketData
+from schemas import TicketData, SSHData
 
 client = AsyncIOMotorClient(MONGODB_URL)
 
@@ -15,5 +15,6 @@ async def setup():
         document_models=[
             StorageData,
             TicketData,
+            SSHData,
         ]
     )

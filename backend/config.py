@@ -1,3 +1,4 @@
+from Crypto.Protocol.KDF import PBKDF2
 from pydantic import BaseModel
 from orjson import dumps, loads, OPT_INDENT_2
 
@@ -17,6 +18,11 @@ class MongoDBConfig(BaseModel):
     name: str = "pd2-ticket"
 
 
+class AESConfig(BaseModel):
+    salt: str = urandom(32).hex()
+    key: str = urandom(32).hex()
+
+
 class Config(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
@@ -25,6 +31,7 @@ class Config(BaseModel):
     single_file_size: int = 1 * 1024 * 1024
     discord_config: DiscordConfig = DiscordConfig()
     mongodb_config: MongoDBConfig = MongoDBConfig()
+    aes_config: AESConfig = AESConfig()
 
 
 if not isfile("config.json"):
@@ -47,6 +54,11 @@ DISCORD_ADMINS = config.discord_config.admins
 MONGODB_URL = config.mongodb_config.url
 MONGODB_NAME = config.mongodb_config.name
 
+AES_KEY = PBKDF2(
+    password=config.aes_config.key,
+    salt=bytes.fromhex(config.aes_config.salt),
+    dkLen=len(config.aes_config.salt)
+)
 
 with open("config.json", "wb") as config_file:
     config_file.write(dumps(

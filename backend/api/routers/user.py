@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.get(
-    "/{user_id}",
+    path="/{user_id}",
     response_model=DisplayDiscordUser,
     description="Get special user's info"
 )

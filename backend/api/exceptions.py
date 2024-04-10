@@ -10,6 +10,11 @@ TICKET_NOT_FOUND = HTTPException(
     detail="Ticket not found"
 )
 
+SSH_CONFIG_NOT_FOUND = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="SSH config not found"
+)
+
 FILE_OVER_SIZE = HTTPException(
     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
     detail="File is too large"

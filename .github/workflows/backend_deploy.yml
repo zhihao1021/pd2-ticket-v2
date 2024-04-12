@@ -8,16 +8,16 @@ jobs:
     name: pull and update
     runs-on: ubuntu-22.04
     steps:
-      - name: Exec SSH command
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          proxy_host: ${{ secrets.PROXY_HOST }}
-          proxy_username: ${{ secrets.PROXY_USERNAME }}
-          proxy_key: ${{ secrets.PROXY_KEY }}
-          proxy_port: ${{ secrets.PROXY_PORT }}
-          script_stop: true
-          script: whoami
+    - name: Exec SSH command
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        proxy_host: ${{ secrets.PROXY_HOST }}
+        proxy_username: ${{ secrets.PROXY_USERNAME }}
+        proxy_key: ${{ secrets.PROXY_KEY }}
+        proxy_port: ${{ secrets.PROXY_PORT }}
+        script_stop: true
+        script: whoami

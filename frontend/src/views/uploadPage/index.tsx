@@ -24,6 +24,10 @@ export default function UploadPage(): ReactElement {
         setRemark("");
     }, []);
 
+    useEffect(() => {
+        reset();
+    }, []);
+
     useEffect(() => () => {
         reset();
     }, [reset]);

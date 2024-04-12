@@ -44,6 +44,7 @@
             z-index: 10;
             height: fit-content;
             user-select: none;
+            line-height: 1.2rem;
         }
 
         .lineN::before {
@@ -57,6 +58,7 @@
 
         .context {
             height: fit-content;
+            line-height: 1.2rem;
         }
     }
 }

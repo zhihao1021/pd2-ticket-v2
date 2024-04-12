@@ -42,5 +42,5 @@ jobs:
           script_stop: true
           script: |
             ip a
-            ls ~/.nvm/versions/node/v20.12.2/bin/
+            ~/.nvm/versions/node/v20.12.2/bin/npm -v
   

@@ -41,6 +41,12 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
-            node -v
-            npm -v
+            source ~/.nvm/nvm.sh
+            cd ~/pd2-ticket-v2/frontend
+            git pull
+            npm i
+            rm -rf build
+            npm run build
+            echo ${{ secrets.NGINX_SUDO_PASSWORD }} | sudo -S rm -rf /var/www/${{ secrets.DONMAIN }}/html
+            echo ${{ secrets.NGINX_SUDO_PASSWORD }} | sudo -S cp -r build /var/www/${{ secrets.DONMAIN }}/html
   

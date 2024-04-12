@@ -35,7 +35,14 @@
             align-items: center;
             justify-content: center;
             color: var(--color-sub);
-            font-size: 1.5rem;
+            text-align: center;
+
+            >div:nth-child(1) {
+                font-size: min(1.5rem, 6vw);
+            }
+            >div:nth-child(2) {
+                font-size: min(1.5rem, 5vw);
+            }
         }
 
         .dataBox {

@@ -108,7 +108,9 @@ export default function TicketListPage(): ReactElement {
                 level: "ERROR",
                 timestamp: Date.now()
             });
-            setNavigate("../");
+            if (userId !== "@me") {
+                setNavigate("../");
+            }
         }).finally(() => {
             setLoading(false)
         });

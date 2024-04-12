@@ -1,5 +1,6 @@
 import {
-    ReactElement
+    ReactElement,
+    useEffect
 } from "react";
 
 import MessageBox from "schemas/messageBox";
@@ -17,11 +18,12 @@ export default function MessageQueue(props: propsType): ReactElement {
 
     return <div id="messageQueue">
         {
-            messageQueue.map(data => <div
+            messageQueue.length > 0 ? messageQueue.map(data => <div
                 key={`${data.timestamp}${data.context.slice(0, 3)}${data.level}`}
+                data-key={`${data.timestamp}${data.context.slice(0, 3)}${data.level}`}
                 className="box"
                 data-level={data.level}
-            >{data.context}</div>)
+            >{data.context}</div>) : undefined
         }
     </div>;
 };

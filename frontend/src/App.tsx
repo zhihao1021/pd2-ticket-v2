@@ -54,6 +54,7 @@ export default function App(): ReactElement {
     }, [token]);
 
     const addMessage = useCallback((messageBox: MessageBox) => {
+        messageBox.timestamp += Math.random();
         setMessageQueue(v => [...v, messageBox]);
         setTimeout(() => {
             setMessageQueue(v => v.slice(1));
@@ -62,7 +63,6 @@ export default function App(): ReactElement {
 
     useEffect(() => {
         setDealError((error) => {
-            console.log(error);
             if (error.response === undefined) {
                 addMessage({
                     level: "ERROR",

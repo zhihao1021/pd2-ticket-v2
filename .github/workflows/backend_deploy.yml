@@ -2,13 +2,13 @@ name: Auto update backend
 on:
   push:
     branches:
-      - main
+    - main
 jobs:
   deploy:
-    name: Auto Update
-    runs-on: ubuntu-latest
+    name: pull and update
+    runs-on: ubuntu-22.04
     steps:
-      - name: Execute SSH command
+      - name: Exec SSH command
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}

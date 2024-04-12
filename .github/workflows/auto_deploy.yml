@@ -28,7 +28,7 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
             echo ${{ secrets.SUDO_PASSWORD }} | sudo -S systemctl restart pd2-ticket.service
-      - name: deploy backend
+      - name: deploy frontend
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.NGINX_HOST }}
@@ -43,6 +43,8 @@ jobs:
           script: |
             cd ~/pd2-ticket-v2/frontend
             git pull
+            la
+            npm -v
             alias npm=~/.nvm/versions/node/v20.12.2/bin/npm
             npm i
             rm -rf build

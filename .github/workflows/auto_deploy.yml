@@ -41,9 +41,12 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
+            source .bashrc
+            ls
+            la
+            npm -v
             cd ~/pd2-ticket-v2/frontend
             git pull
-            la
             npm -v
             alias npm=~/.nvm/versions/node/v20.12.2/bin/npm
             npm i

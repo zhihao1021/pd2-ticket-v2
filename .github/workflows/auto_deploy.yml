@@ -41,6 +41,6 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
-            source .bashrc
-            npm -v
+            ip a
+            ~/.nvm/versions/node/v20.12.2/bin/npm -v
   

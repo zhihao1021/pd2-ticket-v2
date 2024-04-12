@@ -1,0 +1,51 @@
+name: Auto deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: deploy backend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          proxy_host: ${{ secrets.PROXY_HOST }}
+          proxy_username: ${{ secrets.PROXY_USERNAME }}
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          proxy_port: ${{ secrets.PROXY_PORT }}
+          script_stop: true
+          script: |
+            cd ~/pd2-ticket-v2/backend
+            git pull
+            source venv/bin/activate
+            pip install -r requirements.txt
+            echo ${{ secrets.SUDO_PASSWORD }} | sudo -S systemctl restart pd2-ticket.service
+      - name: deploy backend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.NGINX_HOST }}
+          username: ${{ secrets.NGINX_USERNAME }}
+          key: ${{ secrets.NGINX_KEY }}
+          port: ${{ secrets.NGINX_PORT }}
+          proxy_host: ${{ secrets.PROXY_HOST }}
+          proxy_username: ${{ secrets.PROXY_USERNAME }}
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          proxy_port: ${{ secrets.PROXY_PORT }}
+          script_stop: true
+          script: |
+            cd ~/pd2-ticket-v2/frontend
+            git pull
+            npm i
+            rm -rf build
+            npm run build
+            echo ${{ secrets.NGINX_SUDO_PASSWORD }} | sudo -S rm -rf /var/www/${{ secrets.DONMAIN }}/html
+            echo ${{ secrets.NGINX_SUDO_PASSWORD }} | sudo -S cp -r build /var/www/${{ secrets.DONMAIN }}/html
+  

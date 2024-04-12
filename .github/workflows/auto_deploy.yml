@@ -41,9 +41,9 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
-            source .bashrc
-            ls
-            la
+            cat .bashrc
+            ls -a
+            cwd
             npm -v
             cd ~/pd2-ticket-v2/frontend
             git pull

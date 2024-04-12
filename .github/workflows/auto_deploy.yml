@@ -23,6 +23,7 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
+            source .bashrc
             cd ~/pd2-ticket-v2/backend
             git pull
             source venv/bin/activate
@@ -41,6 +42,7 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
+            source .bashrc
             cd ~/pd2-ticket-v2/frontend
             git pull
             npm i

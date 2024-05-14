@@ -126,7 +126,7 @@ async def get_setup_command(user: UserDepends) -> str:
     ssh_data = await SSHData.get(user.id)
     if ssh_data is None:
         raise SSH_CONFIG_NOT_FOUND
-    command = f"ssh {ssh_data.username}@{SSH_HOST} -p {SSH_PORT} \"echo -e '\\n# Ticket Public Key\\n{
+    command = f"ssh {ssh_data.username}@{SSH_HOST} -p {SSH_PORT} \"echo -e '\\n# Ticket Public Key\\n{ \
         ssh_data.public_key}\\n' >> ~/.ssh/authorized_keys\""
     return command
 

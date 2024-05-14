@@ -1,6 +1,7 @@
 from asyncssh import (
     connect,
     Error as SSHError,
+    SFTPClient,
     SFTPName,
     SFTPNoSuchFile,
     SFTPPermissionDenied,
@@ -27,7 +28,7 @@ from config import SSH_HOST, SSH_PORT
 from schemas import generate_ssh_data, SSHData
 
 from ..exceptions import SSH_CONFIG_NOT_FOUND
-from ..oauth import UserDepends
+from ..oauth import discord_oauth_router, UserDepends
 
 router = APIRouter(
     prefix="/ssh",
@@ -43,6 +44,7 @@ class FileData(BaseModel):
 
 
 class ListDir(BaseModel):
+    path: str
     files: list[FileData]
     directories: list[FileData]
     links: list[FileData]
@@ -59,7 +61,8 @@ async def create_ssh_client(ssh_data: SSHData) -> SSHClientConnection:
     return conn
 
 
-def parseListdir(data: list[SFTPName]) -> ListDir:
+async def get_listdir(path: str, sftp_client: SFTPClient) -> ListDir:
+    data = await sftp_client.readdir()
     files = list(map(
         lambda d: FileData(
             type="FILE",
@@ -89,6 +92,7 @@ def parseListdir(data: list[SFTPName]) -> ListDir:
     ))
 
     return ListDir(
+        path=path,
         files=files,
         directories=directories,
         links=links
@@ -115,15 +119,16 @@ async def create_ssh_config(
 
 
 @router.get(
-    path="/public_key",
+    path="/setup-command",
     description="Get public key."
 )
-async def get_public_key(user: UserDepends) -> str:
+async def get_setup_command(user: UserDepends) -> str:
     ssh_data = await SSHData.get(user.id)
     if ssh_data is None:
         raise SSH_CONFIG_NOT_FOUND
-
-    return ssh_data.public_key
+    command = f"ssh {ssh_data.username}@{SSH_HOST} -p {SSH_PORT} \"echo -e '\\n# Ticket Public Key\\n{
+        ssh_data.public_key}\\n' >> ~/.ssh/authorized_keys\""
+    return command
 
 
 @router.get(
@@ -150,29 +155,44 @@ async def test_connection(user: UserDepends) -> bool:
 @router.websocket(
     path="/ws",
 )
-async def borwser(ws: WebSocket, user: UserDepends):
-    ssh_data = await SSHData.get(user.id)
-    if ssh_data is None:
-        raise SSH_CONFIG_NOT_FOUND
-
-    await ws.accept()
-    ssh_client: SSHClientConnection = None
+async def borwser(ws: WebSocket):
     try:
+        await ws.accept()
+        token = await ws.receive_text()
+        user = await discord_oauth_router.valid_token(token)
+
+        ssh_data = await SSHData.get(user.id)
+        if ssh_data is None:
+            raise SSH_CONFIG_NOT_FOUND
+
+        ssh_client: SSHClientConnection = None
+
         ssh_client = await create_ssh_client(ssh_data=ssh_data)
         sftp_client = await ssh_client.start_sftp_client()
 
         path = await sftp_client.getcwd()
-        file_list = await sftp_client.readdir()
-        listdirData = parseListdir(file_list)
+        listdirData = await get_listdir(path, sftp_client)
 
         await ws.send_bytes(dumps(listdirData.model_dump()))
         while True:
-            data = await ws.receive_text()
+            receive_path = await ws.receive_text()
             try:
-                result = await sftp_client.readdir()
-            except:
-                pass
-            pass
+                target_path = await sftp_client.realpath(f"{path}/{receive_path}")
+
+                if await sftp_client.isdir(target_path):
+                    listdirData = await get_listdir(target_path, sftp_client)
+                    path = target_path
+                elif await sftp_client.isfile(target_path):
+                    buffer = b""
+                    async with sftp_client.open(target_path, "rb") as file:
+                        buffer += await file.read(64)
+                    await ws.send_bytes(buffer)
+                    continue
+                await ws.send_bytes(dumps(listdirData.model_dump()))
+            except (SFTPNoSuchFile, SFTPPermissionDenied):
+                await ws.send_bytes(dumps(listdirData.model_dump()))
+    except HTTPException as exc:
+        raise exc
     except WebSocketDisconnect:
         pass
     except:

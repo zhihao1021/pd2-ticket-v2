@@ -25,6 +25,7 @@ class SSHConfig(BaseModel):
 class Config(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
+    root_path: str = ""
     key: str = urandom(16).hex()
     data_dir: str = "data"
     single_file_size: int = 1 * 1024 * 1024
@@ -35,12 +36,15 @@ class Config(BaseModel):
 
 if not isfile("config.json"):
     config = Config()
+    input("Please goto complete your config.......")
+    exit(0)
 else:
     with open("config.json", "rb") as config_file:
         config = Config(**loads(config_file.read()))
 
 HOST = config.host
 PORT = config.port
+ROOT_PATH = config.root_path
 KEY = config.key
 DATA_DIR = config.data_dir
 SINGLE_FILE_SIZE = config.single_file_size

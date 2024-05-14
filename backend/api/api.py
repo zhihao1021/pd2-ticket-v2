@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import Config, Server
 
-from config import HOST, PORT
+from config import HOST, PORT, ROOT_PATH
 
 from .oauth import discord_oauth_router
 from .routers import (
@@ -14,7 +14,8 @@ from .routers import (
 app = FastAPI(
     title="PD2 Ticket",
     description="System for student display code to TA.",
-    version="v2.0.0"
+    version="v2.0.0",
+    root_path=ROOT_PATH,
 )
 
 origins = [

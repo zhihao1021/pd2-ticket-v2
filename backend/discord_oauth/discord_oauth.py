@@ -7,7 +7,6 @@ from orjson import loads
 
 from datetime import datetime, timedelta, timezone
 from os import urandom
-from os.path import isdir
 from typing import Literal
 
 from .schemas import (

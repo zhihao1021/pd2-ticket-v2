@@ -61,6 +61,13 @@ class TicketDataViewNoAuthor(TicketDataBase):
     Same as TicketData, but without author field.
     This will be return when user fetch a list of tickets for lower traffic.
     """
+    id: str = Field(
+        validation_alias=AliasChoices("id", "_id"),
+        serialization_alias="id",
+        title="TicketID",
+        description="Ticket ID.",
+    )
+
     model_config = {
         "json_schema_extra": {
             "examples": [

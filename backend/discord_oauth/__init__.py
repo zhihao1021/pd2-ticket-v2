@@ -1,7 +1,7 @@
 from .discord_oauth import DiscordOAuthRouter
 from .schemas import (
     AccessTokenResponse,
-    DiscordUser,
+    DiscordUserBase,
     DisplayDiscordUser,
     StorageData,
     StorageDataView,

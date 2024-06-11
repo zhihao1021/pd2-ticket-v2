@@ -10,6 +10,7 @@ router = APIRouter(
     tags=["User"],
 )
 
+
 @router.get(
     path="/{user_id}",
     response_model=DisplayDiscordUser,
@@ -21,5 +22,5 @@ async def get_user(user: UserDepends, user_id: str) -> DisplayDiscordUser:
     result = await StorageData.get(user_id)
     if result is None:
         raise USER_NOT_FOUND
-    
+
     return result.display_data

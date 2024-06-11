@@ -1,5 +1,5 @@
 from beanie import Document
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 from datetime import datetime
 from typing import Optional, Union
@@ -13,17 +13,50 @@ class AccessTokenResponse(BaseModel):
     scope: str = "identify"
 
 
-class DiscordUser(BaseModel):
-    id: str
-    username: str
-    global_name: Optional[str]
-    avatar: Optional[str]
+class DiscordUserBase(BaseModel):
+    id: str = Field(
+        title="UserID",
+        description="Discord user id."
+    )
+    username: str = Field(
+        title="UserName",
+        description="Discord username."
+    )
+    global_name: Optional[str] = Field(
+        title="UserDisplayName",
+        description="Discord user's global name."
+    )
+    avatar: Optional[str] = Field(
+        title="UserAvatar",
+        description="URL of discord user's avatar."
+    )
 
 
-class DisplayDiscordUser(DiscordUser):
-    is_admin: bool
-    display_name: str
-    display_avatar: str
+class DisplayDiscordUser(DiscordUserBase):
+    is_admin: bool = Field(
+        title="IsAdmin",
+        description="Whether user is admin."
+    )
+    display_name: str = Field(
+        title="UserDisplayName",
+        description="User's display name."
+    )
+    display_avatar: str = Field(
+        title="UserAvatar",
+        description="URL of user's avatar."
+    )
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "is_admin": False,
+                    "display_name": "User",
+                    "display_avatar": "https://cdn.discordapp.com/embed/avatars/0.png",
+                }
+            ]
+        }
+    }
 
 
 class JWTData(DisplayDiscordUser):
@@ -51,4 +84,7 @@ class StorageData(Document):
 
 
 class StorageDataView(BaseModel):
-    display_data: DisplayDiscordUser
+    display_data: DisplayDiscordUser = Field(
+        title="UserDisplaydata",
+        description="The user data but only with display_data field."
+    )

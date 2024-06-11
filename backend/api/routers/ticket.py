@@ -219,8 +219,10 @@ async def create_ticket(
     user = await StorageData.get(user.id)
     ticket = TicketData(
         author=user,
-        files=list(
-            map(lambda file: file.filename.replace("\\", "/"), accept_files)),
+        files=list(map(
+            lambda file: file.filename.replace("\\", "/"),
+            accept_files
+        )),
         **data.model_dump(exclude_unset=True)
     )
 

@@ -22,7 +22,7 @@ from typing import Annotated, Union
 
 from config import DATA_DIR, SINGLE_FILE_SIZE
 from discord_oauth import (
-    DiscordUser,
+    DiscordUserBase,
     JWTData,
     StorageData,
 )

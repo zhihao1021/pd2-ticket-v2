@@ -12,7 +12,7 @@ from typing import Literal
 
 from .schemas import (
     AccessTokenResponse,
-    DiscordUser,
+    DiscordUserBase,
     DisplayDiscordUser,
     JWTData,
     JWT,
@@ -113,7 +113,7 @@ class DiscordOAuthRouter:
             response = await client.get(
                 f"{DISCORD_API}/users/@me"
             )
-            user_data = DiscordUser(
+            user_data = DiscordUserBase(
                 **loads(await response.content.read())
             )
 

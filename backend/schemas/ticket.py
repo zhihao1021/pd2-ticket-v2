@@ -92,6 +92,12 @@ class TicketDataView(TicketDataBase):
     Same as TicketData, but the author field only contain display data.
     This should be return when user only one ticket.
     """
+    id: str = Field(
+        validation_alias=AliasChoices("id", "_id"),
+        serialization_alias="id",
+        title="TicketID",
+        description="Ticket ID.",
+    )
     author: StorageDataView = Field(
         title="TicketAuthor",
         description="The author of this ticket but only have display_data field."

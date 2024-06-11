@@ -93,7 +93,7 @@ async def save_uploadfile(
 
 
 async def get_user_ticket_list(
-    user: Union[StorageData, DiscordUser, str],
+    user: Union[StorageData, DiscordUserBase, str],
     offset: int = 0,
     length: int = 10,
     no_author: bool = False,

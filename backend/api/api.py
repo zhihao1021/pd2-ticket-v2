@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import Config, Server
 
-from config import HOST, PORT, ROOT_PATH
+from config import HOST, PORT, WORKER_COUNT, ROOT_PATH
 
 from .oauth import discord_oauth_router
 from .routers import (
@@ -49,7 +49,8 @@ async def run():
     config = Config(
         app=app,
         host=HOST,
-        port=PORT
+        port=PORT,
+        workers=WORKER_COUNT
     )
     server = Server(config=config)
     await server.serve()

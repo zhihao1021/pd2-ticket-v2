@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from orjson import dumps, loads, OPT_INDENT_2
 
+from multiprocessing import cpu_count
 from os import urandom
 from os.path import isfile
 
@@ -25,6 +26,7 @@ class SSHConfig(BaseModel):
 class Config(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
+    worker_count: int = cpu_count()
     root_path: str = ""
     key: str = urandom(16).hex()
     data_dir: str = "data"
@@ -44,6 +46,7 @@ else:
 
 HOST = config.host
 PORT = config.port
+WORKER_COUNT = config.worker_count
 ROOT_PATH = config.root_path
 KEY = config.key
 DATA_DIR = config.data_dir

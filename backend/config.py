@@ -26,6 +26,7 @@ class SSHConfig(BaseModel):
 class Config(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
+    worker: int = 1
     process_count: int = cpu_count()
     root_path: str = ""
     key: str = urandom(16).hex()
@@ -46,6 +47,7 @@ else:
 
 HOST = config.host
 PORT = config.port
+WORKER = config.worker
 PROCESS_COUNT = config.process_count
 ROOT_PATH = config.root_path
 KEY = config.key

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import Config, Server
 
-from config import HOST, PORT, WORKER_COUNT, ROOT_PATH
+from config import HOST, ROOT_PATH
 
 from .oauth import discord_oauth_router
 from .routers import (
@@ -45,12 +45,11 @@ def ping() -> str:
     return "pong"
 
 
-async def run():
+async def run(port: int):
     config = Config(
         app=app,
         host=HOST,
-        port=PORT,
-        workers=WORKER_COUNT
+        port=port,
     )
     server = Server(config=config)
     await server.serve()

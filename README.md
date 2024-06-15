@@ -1,4 +1,11 @@
 # PD2 Ticket System v2
+[![Deploy](https://github.com/zhihao1021/pd2-ticket-v2/actions/workflows/auto_deploy.yml/badge.svg)](https://github.com/zhihao1021/pd2-ticket-v2/actions/workflows/auto_deploy.yml)
+![GitHub last commit](https://img.shields.io/github/last-commit/zhihao1021/pd2-ticket-v2)
+
+
+[English en-US](./README.md) |
+[繁體中文 zh-Hans](./README.zh_Hans.md)
+
 
 ## Introduction
 A system for students in program design course to share their code with TAs.
@@ -74,6 +81,7 @@ npm build
 #### 4.Deploy to your reverse proxy
 Copy the `build` to your reverse proxy's path.
 
+
 ## Config
 ### Backend
 Example Config:
@@ -142,10 +150,10 @@ Example Config:
 
 #### Discord Config Part
 - `redirect_uri`:
-    The redirect uri you get in discord's developer portal.
+    The redirect uri you set in discord's developer portal.
 
 - `client_id`:
-    The  client id you get in discord's developer portal.
+    The client id you get in discord's developer portal.
 
 - `client_secret`
     The client secret you get in discord's developer portal.
@@ -161,6 +169,7 @@ Example Config:
     Your table's name, default is `pd2-ticket`.
 
 #### SSH Config Part
+> This feature is still develope.
 - `host`:
     The SSH server's address.
 
@@ -183,3 +192,20 @@ REACT_APP_OAUTH_URL=https://discord.com/oauth2/authorize?client_id=000000&respon
 
 - `REACT_APP_OAUTH_URL`:
     The url link to discord oauth.
+
+
+## Snapshots
+### Ticket list page
+![ticket list page](assets/Snapshot01.png)
+
+### Ticket info page
+![ticket info page](assets/Snapshot02.png)
+
+### Code context page
+![code context page](assets/Snapshot03.png)
+
+### Upload file page
+![upload file page](assets/Snapshot04.png)
+
+### Setting page
+![setting page](assets/Snapshot05.png)

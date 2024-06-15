@@ -26,19 +26,19 @@ Create virtual environment:
 python3 -m venv .venv
 ```
 
-Enter virtial environment(Windows):
+Enter virtual environment(Windows):
 ```bash
 .\.venv\Scripts\activate
 ```
 
-Enter virtial environment(MacOS/Unix):
+Enter virtual environment(MacOS/Unix):
 ```bash
 source .venv/bin/activate
 ```
 
 #### 1.Install dependency packages
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 #### 2.First start up
@@ -81,8 +81,10 @@ Example Config:
 {
   "host": "0.0.0.0",
   "port": 8080,
-  "key": "601d4c0a0c2ba32fe3f8d087475657a6",
+  "worker": 1,
+  "process_count": 6,
   "root_path": "",
+  "key": "601d4c0a0c2ba32fe3f8d087475657a6",
   "data_dir": "data",
   "single_file_size": 1048576,
   "discord_config": {
@@ -110,6 +112,12 @@ Example Config:
 
 - `port`:
     API binding port, default is `8080`.
+
+- `workers`
+    Uvicorn workers count, default is `1`.
+
+- `process_count`
+    How many process will start, default is your cpu's cores count. (⚠ The more process start, more ports will be used, be careful about that there is no other application occpuy the port in the range. For example, you set the port `8080` and process count `6`, it will use the port in `8080~8085`.)
 
 - `root_path`:
     FastAPI's root path, be used for Open API's document.

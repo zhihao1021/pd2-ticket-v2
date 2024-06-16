@@ -1,6 +1,7 @@
 # PD2 Ticket System v2
 [![Deploy](https://github.com/zhihao1021/pd2-ticket-v2/actions/workflows/auto_deploy.yml/badge.svg)](https://github.com/zhihao1021/pd2-ticket-v2/actions/workflows/auto_deploy.yml)
 [![GitHub last commit](https://img.shields.io/github/last-commit/zhihao1021/pd2-ticket-v2)](https://github.com/zhihao1021/pd2-ticket-v2/commit/master)
+[![Github Wiki](https://img.shields.io/badge/Github-Wiki-blue)](https://github.com/zhihao1021/pd2-ticket-v2/wiki)
 
 
 [English en-US](./README.md) |

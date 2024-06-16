@@ -1,5 +1,10 @@
 # PD2 Ticket System v2 - Backend
 
+
+[English en-US](./README.md) |
+[繁體中文 zh-Hans](./README.zh_Hans.md)
+
+
 ## Table of Content
 - [API Interpretation](#api-interpretation)
     - [Authentication](#authentication)
@@ -55,7 +60,7 @@ If the token valid failed, you will receive a response with error code `403` lik
             ```
     - Error Response:
         - Invalid authentication credentials
-            - Description: Your JWT is not invalid.
+            - Description: Your token is not invalid.
             - Status Code: `403`
         - Authorize failed
             - Description: Valid failed when authorize the token with discord.
@@ -286,9 +291,6 @@ If the token valid failed, you will receive a response with error code `403` lik
         - Path Parameters:
             - `user_id`: The id of the user that the ticket you are querying belongs to. If you want to query the ticket of yourself, you can use `@me`.
             - `ticket_id`: The id of the ticket you want to delete.
-        - Body:
-            - `is_public`: Whether the ticket is public.
-            - `remark`: The remark of the ticket.
         - Example:
             ```
             /ticket/@me/c39e17dde954666c8466

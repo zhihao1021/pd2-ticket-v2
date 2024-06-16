@@ -212,7 +212,7 @@ async def create_ticket(
     if len(accept_files) == 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No legal file"
+            detail="Missing file"
         )
 
     # Create ticket in DB

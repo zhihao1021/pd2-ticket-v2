@@ -6,7 +6,7 @@
 
 
 ## 大綱
-- [解釋](#api-解釋)
+- [API 解釋](#api-解釋)
     - [驗證](#驗證)
     - [Discord 驗證](#Discord-驗證)
         - [PUT `/oauth`](#-put-oauth)
@@ -20,9 +20,9 @@
         - [DELETE `/ticket/{user_id}/{ticket_id}`](#-delete-ticketuser_idticket_id)
         - [GET `/ticket/{user_id}/{ticket_id}/files/{file_path}`](#-get-ticketuser_idticket_idfilesfile_path)
         - [GET `/ticket/{user_id}/{ticket_id}/download`](#-get-ticketuser_idticket_iddownload)
-    - [User](#使用者)
+    - [使用者](#使用者)
         - [GET `/user/{user_id}`](#-get-useruser_id)
-    - [Info](#資訊)
+    - [資訊](#資訊)
         - [GET `/version`](#get-version)
         - [GET `/ping`](#get-ping)
 

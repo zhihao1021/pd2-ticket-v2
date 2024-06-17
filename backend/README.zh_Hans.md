@@ -40,7 +40,7 @@
 Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
 ```
 
-如果你沒有將 Token 放入標頭，你將會收到一個狀態碼 `401` 的回應，如下面所示：
+如果你沒有將 Token 放入標頭，你將會收到一個狀態碼 `403` 的回應，如下面所示：
 
 ```json
 {

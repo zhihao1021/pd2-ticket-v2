@@ -27,6 +27,8 @@
         - [GET `/ping`](#get-ping)
 
 ## API Interpretation
+> Following content also available on `/docs` path of backend.
+![API Interpretation Snapshot](../assets/API-Interpretation01.png)
 
 ### Authentication
 The API route which has 🔒 icon mean that this route need authentication.
@@ -38,7 +40,15 @@ For example:
 Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
 ```
 
-If the token valid failed, you will receive a response with error code `403` like following:
+If you does not add the token into header, you will receive a response with error code `403` like following:
+
+```json
+{
+    "detail": "Not authenticated"
+}
+```
+
+If the token valid failed, you will receive a response with error code `401` like following:
 
 ```json
 {
@@ -59,11 +69,11 @@ If the token valid failed, you will receive a response with error code `403` lik
             }
             ```
     - Error Response:
-        - Invalid authentication credentials
-            - Description: Your token is not invalid.
-            - Status Code: `403`
         - Authorize failed
             - Description: Valid failed when authorize the token with discord.
+            - Status Code: `400`
+        - Invalid authentication credentials
+            - Description: Your token is invalid.
             - Status Code: `401`
 
 - #### POST `/oauth`
@@ -88,7 +98,7 @@ If the token valid failed, you will receive a response with error code `403` lik
     - Error Response:
         - Authorize failed
             - Description: Valid failed when authorize the token with discord.
-            - Status Code: `401`
+            - Status Code: `400`
 
 
 ### Ticket
@@ -161,12 +171,12 @@ If the token valid failed, you will receive a response with error code `403` lik
             }
             ```
     - Error Response: 
-        - File is too large
-            - Description: Some file upload by user is too large.
-            - Status Code: `413`
         - Missing file
             - Description: The user does not upload any file or no any legal files.
             - Status Code: `400`
+        - File is too large
+            - Description: Some file upload by user is too large.
+            - Status Code: `413`
 
 - #### 🔒 GET `/ticket/{user_id}`
     - Description: Get the ticket list of target user.
@@ -281,8 +291,11 @@ If the token valid failed, you will receive a response with error code `403` lik
             }
             ```
     - Error Response:
+        - Permission denied
+            - Description: You are not the owner of this ticket.
+            - Status Code: `403`
         - Ticket not found
-            - Description: The ticket or user you are querying is not exist.
+            - Description: The ticket you are querying is not exist.
             - Status Code: `404`
 
 - #### 🔒 DELETE `/ticket/{user_id}/{ticket_id}`
@@ -300,7 +313,7 @@ If the token valid failed, you will receive a response with error code `403` lik
         - No content.
     - Error Response:
         - Permission denied
-            - Description: This ticket does not belong to you.
+            - Description: You are not the owner of this ticket.
             - Status Code: `403`
 
 - #### 🔒 GET `/ticket/{user_id}/{ticket_id}/files/{file_path}`
@@ -318,14 +331,14 @@ If the token valid failed, you will receive a response with error code `403` lik
         - Status Code: `200`
         - The content of file.
     - Error Response:
-        - Ticket not found
-            - Description: The ticket or user you are querying is not exist.
-            - Status Code: `404`
+        - Ticket file not found
+            - Description: The file does not exist.
+            - Status Code: `400`
         - Permission denied
             - Description: The file path you are querying is illegal.
             - Status Code: `403`
-        - Ticket file not found
-            - Description: The file does not exist.
+        - Ticket not found
+            - Description: The ticket or user you are querying is not exist.
             - Status Code: `404`
 
 - #### 🔒 GET `/ticket/{user_id}/{ticket_id}/download`

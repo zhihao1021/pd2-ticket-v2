@@ -2,7 +2,10 @@ from fastapi import APIRouter
 
 from discord_oauth import DisplayDiscordUser, StorageData
 
-from ..exceptions import USER_NOT_FOUND
+from ..exceptions import (
+    generate_error_response_model,
+    USER_NOT_FOUND
+)
 from ..oauth import UserDepends
 
 router = APIRouter(
@@ -14,7 +17,13 @@ router = APIRouter(
 @router.get(
     path="/{user_id}",
     response_model=DisplayDiscordUser,
-    description="Get special user's info"
+    description="Get special user's info",
+    responses={
+        404: {
+            "description": "The user you are querying is not exist.",
+            "model": generate_error_response_model(USER_NOT_FOUND)
+        }
+    }
 )
 async def get_user(user: UserDepends, user_id: str) -> DisplayDiscordUser:
     if user_id == user.id:

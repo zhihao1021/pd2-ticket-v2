@@ -27,6 +27,8 @@
         - [GET `/ping`](#get-ping)
 
 ## API 解釋
+> 以下的內容同樣可以在後端的 `/docs` 路徑下取得
+![API Interpretation Snapshot](../assets/API-Interpretation01.png)
 
 ### 驗證
 有著 🔒 圖示的路由代表該路由需要進行驗證。
@@ -38,7 +40,15 @@
 Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
 ```
 
-如果驗證失敗，你將會收到一個狀態碼 `403` 的回應，如下面所示：
+如果你沒有將 Token 放入標頭，你將會收到一個狀態碼 `401` 的回應，如下面所示：
+
+```json
+{
+    "detail": "Not authenticated"
+}
+```
+
+如果驗證失敗，你將會收到一個狀態碼 `401` 的回應，如下面所示：
 
 ```json
 {
@@ -59,11 +69,11 @@ Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
             }
             ```
     - 錯誤回應：
-        - Invalid authentication credentials
-            - 描述：你的 Token 是無效的。
-            - 狀態碼：`403`
         - Authorize failed
             - 描述：在與 Discord 進行驗證時失敗。
+            - 狀態碼：`400`
+        - Invalid authentication credentials
+            - 描述：你的 Token 是無效的。
             - 狀態碼：`401`
 
 - #### POST `/oauth`
@@ -88,7 +98,7 @@ Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
     - 錯誤回應：
         - Authorize failed
             - 描述：在與 Discord 進行驗證時失敗。
-            - 狀態碼：`401`
+            - 狀態碼：`400`
 
 
 ### Ticket
@@ -161,12 +171,12 @@ Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
             }
             ```
     - 錯誤回應：
-        - File is too large
-            - 描述：在上傳的檔案中，一些檔案的大小超過限制。
-            - 狀態碼：`413`
         - Missing file
             - 描述：在用戶上傳的檔案中沒有任何合法的檔案。
             - 狀態碼：`400`
+        - File is too large
+            - 描述：在上傳的檔案中，一些檔案的大小超過限制。
+            - 狀態碼：`413`
 
 - #### 🔒 GET `/ticket/{user_id}`
     - 描述：取得特定使用者的 Ticket 清單。
@@ -281,8 +291,11 @@ Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
             }
             ```
     - 錯誤回應：
+        - Permission denied
+            - 描述：你並不是這個 Ticket 的所有者。
+            - 狀態碼：`403`
         - Ticket not found
-            - 描述：你正在查詢的 Ticket 或是使用者不存在。
+            - 描述：你正在查詢的 Ticket 不存在。
             - 狀態碼：`404`
 
 - #### 🔒 DELETE `/ticket/{user_id}/{ticket_id}`
@@ -318,14 +331,14 @@ Authorization: Bearer eyJhbGc ... ZuOCJUPFvC4
         - 狀態碼：`200`
         - 檔案的內容。
     - 錯誤回應：
-        - Ticket not found
-            - 描述：你正在查詢的 Ticket 或是使用者不存在。
-            - 狀態碼：`404`
+        - Ticket file not found
+            - 描述：你查詢的檔案不存在。
+            - 狀態碼：`400`
         - Permission denied
             - 描述：你正在查詢的檔案路徑是不合法的。
             - 狀態碼：`403`
-        - Ticket file not found
-            - 描述：你查詢的檔案不存在。
+        - Ticket not found
+            - 描述：你正在查詢的 Ticket 或是使用者不存在。
             - 狀態碼：`404`
 
 - #### 🔒 GET `/ticket/{user_id}/{ticket_id}/download`

@@ -2,7 +2,6 @@ from aiofiles import open as async_open
 from fastapi import (
     APIRouter,
     Form,
-    HTTPException,
     status,
     UploadFile,
 )
@@ -22,6 +21,7 @@ from typing import Annotated, Union
 
 from config import DATA_DIR, SINGLE_FILE_SIZE
 from discord_oauth import (
+    INVALIDE_AUTHENTICATION_CREDENTIALS,
     DiscordUserBase,
     JWTData,
     StorageData,
@@ -35,11 +35,13 @@ from schemas import (
 )
 
 from ..exceptions import (
-    USER_NOT_FOUND,
-    TICKET_NOT_FOUND,
+    generate_error_response_model,
     FILE_OVER_SIZE,
     FILE_NOT_FOUND,
+    MISSING_FILE,
     PERMISSION_DENIED,
+    TICKET_NOT_FOUND,
+    USER_NOT_FOUND,
 )
 from ..oauth import UserDepends
 
@@ -49,28 +51,45 @@ router = APIRouter(
     prefix="/ticket",
     tags=[
         "Ticket",
-    ]
+    ],
+    responses={
+        401: {
+            "description": "Invalid authentication credentials",
+            "model": generate_error_response_model(INVALIDE_AUTHENTICATION_CREDENTIALS)
+        }
+    }
 )
 
 
 def under_ticket_checker(filename: str) -> bool:
+    """
+    Check file path under the data directory
+    """
+
     if search("[:*?\"<>|~]", filename) is not None:
         return False
 
-    # Save directory example
+    # Save directory
     save_directory = Path(join(TICKET_ROOT, "tickets", "temp")).resolve()
-    # Target path example
+    # Target path
     target_path = Path(join(save_directory, filename)).resolve()
     # Check if target path under save directory path
     return target_path.is_relative_to(save_directory)
 
 
 def uploadfile_checker(file: UploadFile) -> bool:
-    # Check whether file format is legal
+    """
+    Chcek file has filename and not oversize
+    """
+
+    # Check if file format is legal
     if file.filename is None or file.size is None:
         return False
+
+    # Check if file oversize
     if file.size > SINGLE_FILE_SIZE:
         raise FILE_OVER_SIZE
+
     return under_ticket_checker(file.filename)
 
 
@@ -78,6 +97,10 @@ async def save_uploadfile(
     save_directory: str,
     file: UploadFile
 ):
+    """
+    Save file into filesystem
+    """
+
     # Save UploadFile content to file system
     assert file.filename is not None
     filepath = join(save_directory, file.filename)
@@ -99,6 +122,10 @@ async def get_user_ticket_list(
     no_author: bool = False,
     only_public: bool = False,
 ) -> Union[list[TicketDataView], list[TicketDataViewNoAuthor]]:
+    """
+    Get a ticket list of user
+    """
+
     # If user type is not StorageData
     if type(user) is not StorageData:
         # Check whether user is id
@@ -106,6 +133,7 @@ async def get_user_ticket_list(
             # If not, try to get user id
             if not hasattr(user, "id"):
                 raise TypeError
+
             user = user.id
         # Make sure user is id
         assert type(user) is str
@@ -122,6 +150,8 @@ async def get_user_ticket_list(
     query_stat = [TicketData.author.id == user.id]
     if only_public:
         query_stat.append(TicketData.is_public == True)
+
+    # Query DB
     result = await TicketData.find(
         *query_stat,
         skip=max(offset, 0),
@@ -142,6 +172,10 @@ async def get_ticket_with_permission(
     user_id: str,
     ticket_id: str,
 ) -> TicketDataView:
+    """
+    Get the ticket data and make sure that user has permission access it
+    """
+
     # Replace self sign
     if user_id == "@me":
         user_id = user.id
@@ -149,12 +183,15 @@ async def get_ticket_with_permission(
     # Check permission
     only_public = user.id != user_id and not user.is_admin
 
+    # Generate query state
     query_stat = [
         TicketData.id == ticket_id,
         TicketData.author.id == user_id
     ]
     if only_public:
         query_stat.append(TicketData.is_public == True)
+
+    # Query DB
     ticket = await TicketData.find_one(
         *query_stat,
         fetch_links=True
@@ -163,7 +200,10 @@ async def get_ticket_with_permission(
     # If ticket not found
     if ticket is None:
         raise TICKET_NOT_FOUND
+
+    # If ticket file not exist(a ticket should has file)
     if not isdir(join(TICKET_ROOT, ticket_id)):
+        # A ticket with no fil should not exist
         await TicketData.find_one(
             *query_stat,
         ).delete()
@@ -196,6 +236,16 @@ async def self_ticket_list(
     response_model=TicketDataView,
     description="Create ticket",
     status_code=status.HTTP_201_CREATED,
+    responses={
+        400: {
+            "description": "Some file upload by user is too large.",
+            "model": generate_error_response_model(FILE_OVER_SIZE)
+        },
+        413: {
+            "description": "The user does not upload any file or no any legal files.",
+            "model": generate_error_response_model(MISSING_FILE)
+        },
+    }
 )
 async def create_ticket(
     user: UserDepends,
@@ -210,10 +260,7 @@ async def create_ticket(
 
     # If no file
     if len(accept_files) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Missing file"
-        )
+        raise MISSING_FILE
 
     # Create ticket in DB
     user = await StorageData.get(user.id)
@@ -254,6 +301,12 @@ async def create_ticket(
     response_model=list[TicketDataViewNoAuthor],
     description="Get the ticket list of special user",
     status_code=status.HTTP_200_OK,
+    responses={
+        404: {
+            "description": "The user you are querying is not exist.",
+            "model": generate_error_response_model(USER_NOT_FOUND)
+        },
+    }
 )
 async def user_ticket_list(
     user: UserDepends,
@@ -282,6 +335,12 @@ async def user_ticket_list(
     response_model=TicketDataView,
     description="Get ticket info",
     status_code=status.HTTP_200_OK,
+    responses={
+        404: {
+            "description": "The user you are querying is not exist.",
+            "model": generate_error_response_model(USER_NOT_FOUND)
+        },
+    }
 )
 async def get_ticket(
     user: UserDepends,
@@ -302,6 +361,16 @@ async def get_ticket(
     response_model=TicketDataView,
     description="Update ticket",
     status_code=status.HTTP_201_CREATED,
+    responses={
+        403: {
+            "descroption": "You are not the owner of this ticket.",
+            "model": generate_error_response_model(PERMISSION_DENIED)
+        },
+        404: {
+            "description": "The ticket you are querying is not exist.",
+            "model": generate_error_response_model(TICKET_NOT_FOUND)
+        },
+    }
 )
 async def update_ticket(
     user: UserDepends,
@@ -333,7 +402,13 @@ async def update_ticket(
 @router.delete(
     path="/{user_id}/{ticket_id}",
     description="Update ticket",
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        403: {
+            "descroption": "You are not the owner of this ticket.",
+            "model": generate_error_response_model(PERMISSION_DENIED)
+        },
+    }
 )
 async def update_ticket(
     user: UserDepends,
@@ -359,6 +434,20 @@ async def update_ticket(
     response_class=FileResponse,
     description="Get ticket file content",
     status_code=status.HTTP_200_OK,
+    responses={
+        400: {
+            "description": "The file does not exist.",
+            "model": generate_error_response_model(TICKET_NOT_FOUND)
+        },
+        403: {
+            "description": "The file path you are querying is illegal.",
+            "model": generate_error_response_model(PERMISSION_DENIED)
+        },
+        404: {
+            "description": "The ticket or user you are querying is not exist.",
+            "model": generate_error_response_model(TICKET_NOT_FOUND)
+        }
+    }
 )
 async def get_ticket_file_content(
     user: UserDepends,
@@ -388,7 +477,13 @@ async def get_ticket_file_content(
     path="/{user_id}/{ticket_id}/download",
     response_class=StreamingResponse,
     status_code=status.HTTP_200_OK,
-    description="Download ticket zip file"
+    description="Download ticket zip file",
+    responses={
+        404: {
+            "description": "The ticket or user you are querying is not exist.",
+            "model": generate_error_response_model(TICKET_NOT_FOUND)
+        }
+    }
 )
 async def get_ticket_zip_files(
     user: UserDepends,

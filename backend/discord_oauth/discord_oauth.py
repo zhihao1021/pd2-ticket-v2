@@ -25,6 +25,16 @@ security = HTTPBearer(
 
 DISCORD_API = "https://discord.com/api/v10"
 
+AUTHORIZE_FAILED = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Authorize failed"
+)
+INVALIDE_AUTHENTICATION_CREDENTIALS = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Invalid authentication credentials"
+)
+
+
 class DiscordOAuthRouter:
     router: APIRouter = APIRouter(
         prefix="/oauth",
@@ -60,7 +70,17 @@ class DiscordOAuthRouter:
             response_model=JWT,
             status_code=status.HTTP_200_OK,
             description="Get token by discord code",
-            methods=["POST"]
+            methods=["POST"],
+            responses={
+                400: {
+                    "description": "Valid failed when authorize the token with discord.",
+                    "content": {
+                        "application/json": {
+                            "example": {"detail": AUTHORIZE_FAILED.detail}
+                        }
+                    },
+                }
+            }
         )
         self.router.add_api_route(
             path="",
@@ -68,7 +88,25 @@ class DiscordOAuthRouter:
             response_model=JWT,
             status_code=status.HTTP_200_OK,
             description="Refresh token",
-            methods=["PUT"]
+            methods=["PUT"],
+            responses={
+                400: {
+                    "description": "Valid failed when authorize the token with discord.",
+                    "content": {
+                        "application/json": {
+                            "example": {"detail": AUTHORIZE_FAILED.detail}
+                        }
+                    },
+                },
+                401: {
+                    "description": "Your token is invalid.",
+                    "content": {
+                        "application/json": {
+                            "example": {"detail": INVALIDE_AUTHENTICATION_CREDENTIALS.detail}
+                        }
+                    }
+                }
+            }
         )
 
     async def _request_to_discord(
@@ -94,19 +132,13 @@ class DiscordOAuthRouter:
             )
             # Valid failed
             if response.status != 200:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Authorize failed"
-                )
+                raise AUTHORIZE_FAILED
             token_data = AccessTokenResponse(
                 **loads(await response.content.read())
             )
 
         if "identify" not in token_data.scope:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authorize failed"
-            )
+            raise AUTHORIZE_FAILED
         # Fetch user data
         async with ClientSession(headers={"Authorization": f"{token_data.token_type} {token_data.access_token}"}) as client:
             response = await client.get(
@@ -167,10 +199,7 @@ class DiscordOAuthRouter:
             ))
             return decode_data
         except:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Invalid authentication credentials"
-            )
+            raise INVALIDE_AUTHENTICATION_CREDENTIALS
 
     async def oauth(
         self,
@@ -192,10 +221,7 @@ class DiscordOAuthRouter:
                 }
             ))
         except:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Invalid authentication credentials"
-            )
+            raise INVALIDE_AUTHENTICATION_CREDENTIALS
 
         if jwt_data.exp - datetime.now(timezone.utc) > timedelta(days=1):
             return JWT(access_token=jwt)

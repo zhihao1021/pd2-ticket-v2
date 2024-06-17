@@ -30,7 +30,7 @@ app.add_middleware(
 )
 
 app.include_router(discord_oauth_router.router)
-app.include_router(ssh_router)
+# app.include_router(ssh_router)
 app.include_router(ticket_router)
 app.include_router(user_router)
 

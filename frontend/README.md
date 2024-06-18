@@ -21,7 +21,7 @@ All pages are stored here.
 All interfaces are defined in here.
 
 ### `context/`
-There are two React context, `fictionContext` store the loading function and pop-up message box function, `userDataContext` store the user data decode from JWT.
+There are two React context, `functionContext` store the loading function and pop-up message box function, `userDataContext` store the user data decode from JWT.
 
 ### `config/`
 Here store the color config, axios config and some page's z-index config.

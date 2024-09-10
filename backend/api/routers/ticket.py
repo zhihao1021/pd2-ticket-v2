@@ -10,13 +10,13 @@ from fastapi.responses import (
     StreamingResponse,
 )
 
-from asyncio import create_task, gather, get_event_loop
+from asyncio import create_task, gather, get_event_loop, get_running_loop
 from io import BytesIO
 from os import makedirs, remove
 from os.path import isdir, isfile, join, split
 from pathlib import Path
 from re import search
-from shutil import make_archive
+from shutil import make_archive, rmtree
 from typing import Annotated, Union
 
 from config import DATA_DIR, SINGLE_FILE_SIZE
@@ -401,7 +401,7 @@ async def update_ticket(
 
 @router.delete(
     path="/{user_id}/{ticket_id}",
-    description="Update ticket",
+    description="Delete ticket",
     status_code=status.HTTP_204_NO_CONTENT,
     responses={
         403: {
@@ -410,7 +410,7 @@ async def update_ticket(
         },
     }
 )
-async def update_ticket(
+async def delete_ticket(
     user: UserDepends,
     user_id: str,
     ticket_id: str,
@@ -427,6 +427,11 @@ async def update_ticket(
         TicketData.id == ticket_id,
         fetch_links=True
     ).delete()
+
+    ticket_directory = join(TICKET_ROOT, ticket_id)
+    if isdir(ticket_directory):
+        loop = get_running_loop()
+        await loop.run_in_executor(None, rmtree, ticket_directory)
 
 
 @router.get(

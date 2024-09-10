@@ -108,7 +108,7 @@ export default function TicketContentPage(): ReactElement {
     useEffect(() => {
         if (filename === null || filename.length === 0) return;
         setDisplayFile(undefined);
-        setDisplayFilename(filename);
+        setDisplayFilename(decodeURI(filename));
         if (userId !== undefined && ticketId !== undefined) {
             getTicketContent(userId, ticketId, filename).then(data => {
                 setDisplayFile(data);

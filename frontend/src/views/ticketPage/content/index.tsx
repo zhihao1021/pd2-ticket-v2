@@ -108,7 +108,7 @@ export default function TicketContentPage(): ReactElement {
     useEffect(() => {
         if (filename === null || filename.length === 0) return;
         setDisplayFile(undefined);
-        setDisplayFilename(decodeURI(filename));
+        setDisplayFilename(filename);
         if (userId !== undefined && ticketId !== undefined) {
             getTicketContent(userId, ticketId, filename).then(data => {
                 setDisplayFile(data);
@@ -211,7 +211,7 @@ export default function TicketContentPage(): ReactElement {
                             <h3>Files List</h3>
                         </div>
                         <div className="box">
-                            <h3>{displayFilename}</h3>
+                            <h3>{decodeURI(displayFilename)}</h3>
                         </div>
                     </div>
                     <div className="browser">

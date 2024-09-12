@@ -37,6 +37,12 @@ export default function UploadTab(props: propsType): ReactElement {
         });
     }, [setSelectFiles]);
 
+    const nextCheck = useCallback(() => {
+        if (selectFiles.length > 0) {
+            next();
+        }
+    }, [selectFiles, next]);
+
     return <div id="uploadTab" className="section" data-state={state}>
         <div className="toolBar">
             <span className="ms searchIcon">search</span>
@@ -75,7 +81,7 @@ export default function UploadTab(props: propsType): ReactElement {
             <button
                 disabled={selectFiles.length === 0}
                 className="next"
-                onClick={selectFiles.length === 0 ? undefined : next}
+                onClick={nextCheck}
             >Next</button>
         </div>
     </div>

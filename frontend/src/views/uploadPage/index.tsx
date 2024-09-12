@@ -26,21 +26,11 @@ export default function UploadPage(): ReactElement {
 
     useEffect(() => {
         reset();
-    }, []);
+    }, [reset]);
 
     useEffect(() => () => {
         reset();
     }, [reset]);
-
-    useEffect(() => {
-        document.addEventListener("keydown", (event: KeyboardEvent) => {
-            if (event.key === "Enter") {
-                setDisplayPage(i => {
-                    return i < 2 ? i++ : i;
-                });
-            }
-        });
-    }, []);
 
     return <div id="uploadPage" className="page">
         <h2>Create Ticket</h2>

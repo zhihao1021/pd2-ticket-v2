@@ -2,8 +2,6 @@ import {
     ReactElement,
     useCallback,
     useContext,
-    useEffect,
-    useState
 } from "react";
 
 import "./confirmTab.scss";
@@ -19,8 +17,6 @@ type propsType = Readonly<{
     state: string,
 }>;
 
-type createListenerType = ((event: KeyboardEvent) => void) | undefined;
-
 export default function ConfirmTab(props: propsType): ReactElement {
     const {
         files,
@@ -29,8 +25,6 @@ export default function ConfirmTab(props: propsType): ReactElement {
         last,
         state,
     } = props;
-
-    const [createListener, setCreateListener] = useState<createListenerType>(undefined);
 
     const {
         addMessage,
@@ -58,30 +52,6 @@ export default function ConfirmTab(props: propsType): ReactElement {
             setLoading(false);
         });
     }, [files, isPublic, remark, setNavigate, addMessage, setLoading]);
-
-    useEffect(() => {
-        setCreateListener((originCreate: createListenerType) => {
-            if (originCreate !== undefined) {
-                document.removeEventListener("keydown", originCreate);
-            }
-
-            return (event: KeyboardEvent) => {
-                if (event.key === "Enter") {
-                    create()
-                }
-            };
-        })
-    }, [create, state]);
-
-    useEffect(() => {
-        if (state !== "DISPLAY") {
-            return;
-        }
-
-        if (createListener !== undefined) {
-            document.addEventListener("keydown", createListener);
-        }
-    }, [createListener]);
 
     return <div id="confirmTab" className="section" data-state={state}>
         <div className="fileCount">

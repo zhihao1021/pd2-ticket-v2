@@ -23,7 +23,7 @@ jobs:
           proxy_port: ${{ secrets.PROXY_PORT }}
           script_stop: true
           script: |
-            if [ ! -d "pd2-ticket-v2" ]; git clone https://github.com/zhihao1021/pd2-ticket-v2.git; fi
+            if [ ! -d "pd2-ticket-v2" ]; then git clone https://github.com/zhihao1021/pd2-ticket-v2.git; fi
             cd ~/pd2-ticket-v2/backend
             git pull
             source venv/bin/activate
@@ -43,7 +43,7 @@ jobs:
           script_stop: true
           script: |
             source ~/.nvm/nvm.sh
-            if [ ! -d "pd2-ticket-v2" ]; git clone https://github.com/zhihao1021/pd2-ticket-v2.git; fi
+            if [ ! -d "pd2-ticket-v2" ]; then git clone https://github.com/zhihao1021/pd2-ticket-v2.git; fi
             cd ~/pd2-ticket-v2/frontend
             git pull
             npm i
